@@ -20,12 +20,6 @@ def deleteMatches():
     conn.commit()
     conn.close()
 
-    conn = connect()
-    curr = conn.cursor()
-    curr.execute("UPDATE players SET wins = 0;")
-    conn.commit()
-    conn.close()
-
 
 def deletePlayers():
     """Remove all the player records from the database."""
@@ -79,10 +73,7 @@ def playerStandings():
     """
     conn = connect()
     curr = conn.cursor()
-    query = """ SELECT p.id, p.name, COALESCE(p.wins, 0),
-            COALESCE(COUNT(m.id) ,0) AS matches FROM
-            players AS p  LEFT JOIN matches AS m ON p.id = m.winner OR
-            p.id = m.loser GROUP BY p.id ORDER BY p.wins DESC;
+    query = """ SELECT * FROM standings;
     """
     curr.execute(query)
     standings = [(str(row[0]), str(row[1]),
@@ -106,14 +97,14 @@ def reportMatch(winner, loser):
     conn.commit()
     conn.close()
 
-    data = (winner,)
-    conn = connect()
-    curr = conn.cursor()
-    curr.execute(
-        "UPDATE players SET wins = COALESCE(wins, 0) + 1 WHERE id = %s ", data)
-    # results = curr.fetchone()
-    conn.commit()
-    conn.close()
+    # data = (winner,)
+    # conn = connect()
+    # curr = conn.cursor()
+    # curr.execute(
+    #     "UPDATE players SET wins = COALESCE(wins, 0) + 1 WHERE id = %s ", data)
+    # # results = curr.fetchone()
+    # conn.commit()
+    # conn.close()
     # print 'results'
     # print results
 
@@ -135,14 +126,7 @@ def swissPairings():
     """
     conn = connect()
     curr = conn.cursor()
-    query = """SELECT a.id, a.name, b.id, b.name FROM
-            (SELECT DISTINCT * FROM (SELECT id, name, wins, row_number()
-            OVER(ORDER BY wins DESC) AS row FROM players GROUP BY id )AS
-            sta1 WHERE row % 2 =1) AS a,
-            (SELECT DISTINCT * FROM (SELECT id, name, wins, row_number()
-            OVER(ORDER BY wins DESC) AS row FROM players GROUP BY id) AS
-            sta2 WHERE row % 2 =0 ) AS b WHERE CAST (a.row AS INTEGER) =
-            (CAST (b.row AS INTEGER) - 1) AND a.row < b.row ORDER BY a.wins;
+    query = """SELECT * FROM parings;
     """
     curr.execute(query)
     pairings = [(str(row[0]), str(row[1]),

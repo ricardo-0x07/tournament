@@ -11,9 +11,12 @@
 
 # Installation and Running
 
-1. Fork the repository, download. 
-2. Download and/or install the Postgresql and bleach Python Libraries.
-3. To test the Tournament Functions in the command line naviate to the project directory and run the "Python tournament_test.py ." command from the root directory (with the app.yaml file) in the command line.
+1. Fork the repository, download.
+2. Install Postgresql in your python environment
+3. Navigate to the project's root directory in the command line and run "psql" activate the postgresql cli.
+4. Run "CREATE DATABASE tournament;" to Create the tournament database.
+5. Use the sql statements in the "tournament.sql" file to create the tables and views in the sequence presented there.
+6. To test the Tournament Functions in the command line use "\q" to exit "psql" and run "python tournament_test.py".
 
 ## Usage
 1. This can now serve as a back end to an application for a Tournament based on the Swiss System for tournaments.
